@@ -20,5 +20,5 @@ docker build -t shiny-extras $BASEDIR
 docker run -v $TEMP:$APPNAME --rm shiny-extras /bin/sh -c "cd $APPNAME; Rscript publish.R > publish.log"
 
 #creating shiny config
-echo "{\"url\": \"$(tail -1 $TEMP/publish.log | sed 's/^.* //g')\"}" > $OUTPUTS1
-cat $OUTPUTS1
+echo "{\"url\": \"$(tail -1 $TEMP/publish.log | sed 's/^.* //g')\"}" > shinyViz.txt
+cat shinyViz.txt
