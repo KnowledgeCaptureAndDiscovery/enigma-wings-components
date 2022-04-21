@@ -26,18 +26,24 @@ jobs:
       # Set secrets on publish.R
       - shell: bash
         env:
-          SHINY_NAME: ${{ secrets.SHINY_NAME }}
+          SHINY_NAME: ${{ secrets.SHINY_USERNAME }}
           SHINY_TOKEN: ${{ secrets.SHINY_TOKEN }}
           SHINY_SECRET: ${{ secrets.SHINY_SECRET }}
         run: |
           envsubst < visualizations/publish.R.template > visualizations/publish.R
           
       # Runs all tests
-      - name: Running TESTS
+      - name: Running meta-analysis test
         run: |
           cd ./test/meta-analysis/
           bash run.sh
-          cd ../meta-regression-1/
+      
+      - name: Running meta-regression mean age test
+        run: |
+          cd ./test/meta-regression-1/
           bash run.sh
-          cd ../meta-regression-2/
+      
+      - name: Running meta-regression female test
+        run: |
+          cd ./test/meta-regression-2/
           bash run.sh
