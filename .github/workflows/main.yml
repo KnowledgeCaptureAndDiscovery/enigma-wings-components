@@ -26,7 +26,6 @@ jobs:
       # Set secrets on publish.R
       - shell: bash
         env:
-          SHINY_NAME: ${{ secrets.SHINY_USERNAME }}
           SHINY_TOKEN: ${{ secrets.SHINY_TOKEN }}
           SHINY_SECRET: ${{ secrets.SHINY_SECRET }}
         run: |
