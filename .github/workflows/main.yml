@@ -23,6 +23,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
+      # Install dependencies
+      - name: Installing dependencies
+        run: sudo apt-get install -y libssl-dev
+          
       # Set secrets on publish.R
       - shell: bash
         env:
@@ -30,7 +34,13 @@ jobs:
           SHINY_SECRET: ${{ secrets.SHINY_SECRET }}
         run: |
           envsubst < visualizations/publish.R.template > visualizations/publish.R
-          
+
+      # Build image
+      - name: Building image
+        run: |
+          cd ./test
+          docker build -t shiny-extras .
+
       # Runs all tests
       - name: Running meta-analysis test
         run: |

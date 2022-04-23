@@ -14,7 +14,7 @@ APPNAME="/forestplot_$(date +%s)"
 
 #Creating the image:
 #I've changed this name as is a image that includes more packages (see Dockerfile)
-docker build -t shiny-extras $BASEDIR
+#docker build -t shiny-extras $BASEDIR
 #Should be commented after creating the shiny-extras image.
 
 #Running the container. Coping tmp to appname and publishing everithing on $TEMP
