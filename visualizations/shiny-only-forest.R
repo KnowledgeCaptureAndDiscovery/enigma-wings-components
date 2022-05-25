@@ -23,11 +23,12 @@ size_min_value = 0.5
 size_ratio_value = 0.5
 
 var1 = 'EFFECT'
-#var2 = 'MEAN_AGE'     ### added by shruti for local machine
- var2_read = read.delim('input_var.txt', header=FALSE, col.names='input_var')    ### commented by shruti for local machine
- var2 = as.character(var2_read$input_var)                                        ### commented by shruti for local machine
- var2 = gsub("\\(E\\)","", gsub(" ", "",var2))                                   ### commented by shruti for local machine
- print(paste0("the var2 value using new method is: ",var2))                      ### commented by shruti for local machine
+# var2 = 'MEAN_AGE'     ### added by shruti for local machine
+
+var2_read = read.delim('input_var.txt', header=FALSE, col.names='input_var')    ### commented by shruti for local machine
+var2 = as.character(var2_read$input_var)                                        ### commented by shruti for local machine
+var2 = gsub("\\(E\\)","", gsub(" ", "",var2))                                   ### commented by shruti for local machine
+print(paste0("the var2 value using new method is: ",var2))                      ### commented by shruti for local machine
 
 #####DATA CLEANING##########
 # define functions
@@ -44,9 +45,8 @@ FileReadFunc = function(path) {
   return(data)
 }
 
-#Commenting out removemissingfunc and filtermerg func
+
 RemoveMissingFunc = function(data, desiredCols) {
-  #Filter out the rows which have NAs in desired Cols
   completeVec = complete.cases(data[, desiredCols])
   return(data[completeVec, ])
 }
@@ -58,9 +58,6 @@ FilterMergFunc = function(data, desiredCols) {
 }
 
 
-## Added 12/7/20
-##Updated 5/18/21
-## update 04/20/21
 RemoveNonEuroFunc = function(data){
   #Create a list
   NonEuro = c('GOBS', 'IMH', 'UNICAMP', 'Meth-CT', 'MIRECC', 'Meth-CT', 'MIRECC',
@@ -71,14 +68,14 @@ RemoveNonEuroFunc = function(data){
 
 
 DataStats = function(data) {
-  # mean,median,25th and 75th quartiles,min,max
+  #Mean,median,25th and 75th quartiles,min,max
   print(summary(data))
-  # Tukey min,lower-hinge, median,upper-hinge,max
+  #Tukey min,lower-hinge, median,upper-hinge,max
   print(fivenum(data))
 }
 
 
-# define a function to adjust the digits of the statistics
+#Define a function to adjust the digits of the statistics
 digits = function(regression_object){
   if(abs(regression_object$beta[1])<0.001){
     round_decimal=5
@@ -89,47 +86,44 @@ digits = function(regression_object){
 
 #####READ DATA AND DATA CLEANING########
 #Data cleaning
- data = FileReadFunc("data.csv") ####################???????? working???????????????
-#data  =FileReadFunc("/Users/shruti_wbp/Desktop/shiny_wings/may_4_2022/Precentral_rs1080066_ABCD_0315_0.xlsx")         ### added by shruti for local machine
-#data = read.csv(args[1])
+# data = FileReadFunc("data.csv") ####################???????? working???????????????
+data  =FileReadFunc("/Users/shruti_wbp/Desktop/shiny_wings/may_25_2022/Precentral_rs1080066_ABCD_0315.xlsx")         ### added by shruti for local machine
+
 # Remove missing data in Effect and Age
 data = RemoveMissingFunc(data, c(var1, var2))
-# Remove mergeD cohorts based on column N
-data = FilterMergFunc(data, 'N') 
-# Remove Non European cohorts
-data = RemoveNonEuroFunc(data)
-# Sort data based on Demographic
+
+#Remove mergeD cohorts based on column N
+data = FilterMergFunc(data, 'N')
+
+#Remove Non European cohorts
+data = RemoveNonEuroFunc(data) 
+
+#Sort data based on Demographic
 # data = data[order(data$Demographic),]
 
-# manually add random age values if age not in the file
-# if(is.null(data$Age)){
-#   data$Age=30
-# }
-if(is.null(data$MEAN_AGE)){
-  data$MEAN_AGE=30
-}
+#Manually add Age when NA
+data[is.na(data[var2]),var2] = 30
 
-
-###convert data types and calculate N,SE,Z
-#sapply(data,class)
+#Convert data types and calculate N,SE,Z
 cols=c("EFFECT","SAMPLE_SIZE",var2,"CI_LB","CI_UB","N","TOTAL_N","PCT")
 data[cols]=lapply(data[cols],as.character)
 data[cols]=lapply(data[cols],as.numeric)
-# Extract features to run meta regression
-# convert EFFECT SAMPLE_SIZE Age CI_LB CI_UB N TOTAL_N PCT to numeric
+
+#Extract features to run meta regression
+#Convert EFFECT SAMPLE_SIZE Age CI_LB CI_UB N TOTAL_N PCT to numeric
 data$N = data$SAMPLE_SIZE
 data$SE =(data$CI_UB - data$CI_LB)/(2*1.96)
 data$Z = data$EFFECT/data$SE      
 
 
-## create variables for annotation
+#Create variables for annotation
 # area=toString(data$AREA[1])
 # trait=toString(data$TRAIT[1])
 snp=toString(data$SNP[1])
 
 
 
-# function to generate full annotation
+#Function to generate full annotation
 annotation_function = function(area_string, trait_string){
   if(area_string=="TotalSA"){
     area="Total Surface Area"
@@ -150,12 +144,12 @@ trait=annotation_function(toString(data$AREA[1]), toString(data$TRAIT[1]))[2]
 #######UI########
 ui <- fluidPage(
   
-  # theme
+  #Theme
   theme=shinytheme("lumen"),
-  # title
+  #Title
   titlePanel(title = h2("Meta-Analysis of ENIGMA Studies", style = "text-align:center; font-weight:bold;color:black")),
   
-  # age range filter or female percentage filter
+  #Age range filter or female percentage filter
   mainPanel(
     h3("Enter Age Range",style="text-align:left; font-weight:bold;color:black"),
     # h3("Enter Female percentage range",style="text-align:left; font-weight:bold;color:black"),
@@ -174,7 +168,7 @@ ui <- fluidPage(
                "#enter_button:hover {background-color: SeaGreen;
                                               font-weight:bold;}",
                "#enter_button:focus {outline:none;}"),
-    # annotations
+    #Annotations
     tags$p(
       tags$div("The results are for: ", style="font-weight:bold;color:LightSlateGray;font-size:120%"),
       tags$span("Area: ", style="font-weight:bold;color:LightSlateGray", class="annotation"),
@@ -185,10 +179,10 @@ ui <- fluidPage(
       tags$span(trait, style="color:DarkMagenta")
     ),
     
-    # outputs panel
+    #Outputs panel
     # h3("Outputs",style="text-align:left; font-weight:bold;color:black"),
     
-    # add loading message
+    #Add loading message
     tags$head(tags$style(type="text/css","
              #loadmessage {
                position: fixed;
@@ -207,9 +201,7 @@ ui <- fluidPage(
     conditionalPanel(condition="$('html').hasClass('shiny-busy')",
                      tags$div("Loading...",id="loadmessage")),
     
-    
-    # plotOutput("forestplot1", width=600, height=800)
-    # outputs
+    #Outputs
     navbarPage(id="navbar",title=span("",style="font-weight:bold;font-size:15px"),collapsible = TRUE,fluid = TRUE,selected="Age vs. Allele",
                tabPanel("Age vs. Allele",fluidRow(column(width=12, align='center', offset=2, plotlyOutput("scatterplot1", width = 600, height = 500))),
                         fluidRow(column(width=12, align='left', offset=5, div(tableOutput('table1'), style='font-size:85%'),
@@ -229,7 +221,7 @@ ui <- fluidPage(
 
 #######SERVER########
 server = function(input, output,session) {
-  # define res function and error control
+  #Define res function and error control
   res=function(x){
     tryCatch(rma.uni(yi=x$EFFECT, sei=x$SE, mods=x[,var2],verbose=TRUE,method="FE",control=list(stepadj=0.4, maxiter=1000), digits = 5),
              warning=function(w){showModal(modalDialog(
@@ -242,97 +234,75 @@ server = function(input, output,session) {
   
   observeEvent(input$enter_button, 
                { 
-                 # # reset selected tab after recalculation 
+                 #Reset selected tab after recalculation 
                  # updateNavbarPage(getDefaultReactiveDomain(),"navbar",selected="Age vs. Allele")
                  
-                 # evaluate input values
+                 #Evaluate input values
                  if(between(input$min,0,120)==FALSE|between(input$max,0,120)==FALSE){
                    # if(between(input$min,0,0.7)==FALSE|between(input$max,0,0.7)==FALSE){
                    showModal(modalDialog(
                      title="Warning", HTML("Min/Max values are out of range!"),easyClose = FALSE, footer = modalButton('OK')))
                    output$scatterplot1=renderPlotly({})
-                   # output$table1=renderTable({})
                    output$forestplot1=renderPlot({})
                    
                  }else if(input$min>input$max){
                    showModal(modalDialog(
                      title="Warning", HTML("Min value cannot exceed max value!"),easyClose = FALSE, footer = modalButton('OK')))
                    output$scatterplot1=renderPlotly({})
-                   # output$table1=renderTable({})
                    output$forestplot1=renderPlot({})
                  }  
-                 # generate outputs  
+                 #Generate outputs  
                  else{
-                   subset_data=eventReactive(input$enter_button,{subset(data, MEAN_AGE>=input$min& MEAN_AGE<=input$max)},ignoreNULL = FALSE,ignoreInit = FALSE)
-                   # subset_data=eventReactive(input$enter_button,{subset(data, variable_of_interest>=input$min& variable_of_interest<=input$max)},ignoreNULL = FALSE,ignoreInit = FALSE)
+                   subset_data=eventReactive(input$enter_button,{subset(data, data[[var2]] >=input$min & data[[var2]]<=input$max)},ignoreNULL = FALSE,ignoreInit = FALSE)
                    reg_result = reactive( {res(subset_data())})
                    if(is.null(reg_result())==TRUE){
                      output$scatterplot1=renderPlotly({})
-                     # output$table1=renderTable({})
                      output$forestplot1=renderPlot({})
                    }else if(is.null(reg_result())==FALSE){
                      pval = reactive({reg_result()$pval})
                      beta = reactive({reg_result()$beta})
-                     # convert the result to dataframe
-                     result = reactive({preds = predict(reg_result(), newmods=seq(min(subset_data()$MEAN_AGE),max(subset_data()$MEAN_AGE),length=pred_length))
+                     #Convert the result to dataframe
+                     result = reactive({preds = predict(reg_result(), newmods=seq(min(subset_data()[[var2]]),max(subset_data()[[var2]]),length=pred_length))
                      result_df = as.data.frame(preds)
-                     result_df$MEAN_AGE = seq(min(subset_data()$MEAN_AGE),max(subset_data()$MEAN_AGE),length=pred_length)
+                     result_df[var2] = seq(min(subset_data()[[var2]]),max(subset_data()[[var2]]),length=pred_length)
                      return(result_df)})
-                     # size of dots
+                     #Size of dots
                      size = reactive({size_min_value + size_ratio_value * (subset_data()$N - min(subset_data()$N))/(max(subset_data()$N) - min(subset_data()$N))})
-                     # decimal places
+                     #Decimal places
                      round_decimal = reactive({digits(reg_result())})
-                     # calculate statistics
+                     #Calculate statistics
                      beta_ci = reactive(paste("(",format(round(reg_result()$ci.lb[2],round_decimal()),scientific=FALSE),", ",format(round(reg_result()$ci.ub[2],round_decimal()),scientific=FALSE),")",sep=""))
                      beta = reactive(paste(format(round(reg_result()$beta[2],round_decimal()),scientific=FALSE),beta_ci()))
                      p_value = reactive(paste(round(reg_result()$QMp,2)))
                      num_study = reactive(paste(reg_result()$k))
                      
-                     # Generate statistics table
+                     #Generate statistics table
                      stats = data.frame(beta = beta(), pval=p_value(), nstudy=num_study())
                      names(stats)[1] = 'Beta (95% CI)'
                      names(stats)[2] = 'Beta P-Value'
                      names(stats)[3] = 'Number of Studies'
                      
-                     # Generate meta regression scatter plot
+                     #Generate meta regression scatter plot
                      output$scatterplot1 = renderPlotly({
-                       ggplotly(ggplot(subset_data(), aes(x=MEAN_AGE, y=EFFECT)) +
-                                  # hover feature and size and color of dots
-                                  # geom_point(aes(size=size(),color=N,text=paste0('Study: ',Study,'\n', 'Mean age: ',MEAN_AGE,'\n','Effect size: ',format(EFFECT,scientific=FALSE),'\n','Cohort size: ',N))) +
-                                  geom_point(aes(size=size(),text=paste0('Study: ',Study,'\n', 'Mean age: ',MEAN_AGE,'\n','Effect size: ',format(EFFECT,scientific=FALSE),'\n','Cohort size: ',N))) +
-                                  # define legend title
-                                  # labs(color="Cohort size")+
-                                  # scale_color_continuous(name="Cohort size",limits=c(0,max(subset_data()$N)+500))+
-
-                                  # turn off size legend and set parameters for the color bar
-                                  # guides(size="none")+
-                                  # scale_size(range=c(1,4)) +
+                       ggplotly(ggplot(subset_data(), aes(x=subset_data()[[var2]], y=EFFECT)) +
+                                  geom_point(aes(size=size(),text=paste0('Study: ',Study,'\n', 'Mean age: ',subset_data()[[var2]],'\n','Effect size: ',format(EFFECT,scientific=FALSE),'\n','Cohort size: ',N))) +
                                   xlab('Mean Age') +
                                   ylab('Unstandardized Effect Size')+
-                                  # labs(title='Meta-regression analysis\nunstandardized effect size vs. mean age')+
-                                  geom_line(data=result(), aes(x=MEAN_AGE, y=pred)) +
-                                  geom_line(data=result(), aes(x=MEAN_AGE, y=ci.lb), linetype="dashed") +
-                                  geom_line(data=result(), aes(x=MEAN_AGE, y=ci.ub), linetype="dashed") +
+                                  geom_line(data=result(), aes(x=result()[[var2]], y=pred)) +
+                                  geom_line(data=result(), aes(x=result()[[var2]], y=ci.lb), linetype="dashed") +
+                                  geom_line(data=result(), aes(x=result()[[var2]], y=ci.ub), linetype="dashed") +
                                   theme_classic() +
                                   theme(plot.margin=unit(c(0.5,0.5,0.5,0.5),'cm'),
                                         axis.title.x = element_text(face='bold',size=14),
                                         axis.title.y = element_text(face='bold',size=14),
                                         plot.title = element_text(face='bold',size=14,hjust=0.5, vjust=0.5)),
-                                # legend.title=element_text(size=10,face="bold",color="black"),
-                                # legend.text=element_text(size=7),
-                                # legend.background = element_rect(fill="gray90",size=0.5,linetype="dotted")),
                                 tooltip="text")
                      })
                      
-                     # output$table1 = renderTable(stats, striped=TRUE,hover=TRUE,bordered=TRUE,align='c')
-                     
                      output$forestplot1 = renderPlot({
                        ci_min = min(subset_data()$CI_LB)
-                       # ci_max = max(data$CI_UB)
-                       # ci_gap = abs((abs(ci_max) - abs(ci_min))) / 2
                        x_pos = ci_min - abs(ci_min)*0.3
                        forest(x = reg_result(),
-                              # ilab = subset_data()[,var2],
                               ilab = subset_data()[[var2]],
                               ilab.xpos = x_pos, 
                               slab=paste(subset_data()$Study),
@@ -342,26 +312,16 @@ server = function(input, output,session) {
                               digits=round_decimal(),
                               top=1,
                               psize=0.6)
-                       # grid.text("Forest plot for meta-analysis",0.5,0.98,just="center",gp=gpar(cex=1.5,fontface="bold",fontfamily="sans"))
                        y_pos = length(subset_data()$Study) + 2
                        par(col='black',cex=1,font=2)
                        text(x_pos, y_pos, "Demographic")
-                       # x = predict(reg_result(),newmods = mean(subset_data()[,var2]))
                        x = predict(reg_result(),newmods = mean(subset_data()[[var2]]))
                        print(length(x$pred))
                        print(length(x$se))
                        par(col='firebrick2',col.lab='black')
-                       # addpoly(x$pred, sei=x$se, mlab="Discovery", efac = 1,cex=1.2,rows=-0.5,digits=round_decimal(),col='firebrick2',border='firebrick2') #for 62, 50 and 40 cohorts
-                       # addpoly(x$pred, sei=x$se, mlab="Discovery", rows=0.1,  efac = 1, cex=1.2, digits=round_decimal(),col='firebrick2',border='firebrick2') #for 30, 20 cohorts
-                       addpoly(x$pred, sei=x$se, mlab="Discovery", rows=0.5,  efac = 1, cex=1.2, digits=round_decimal(),col='firebrick2',border='firebrick2') #for 10, 5 cohorts
+                       addpoly(x$pred, sei=x$se, mlab="Discovery", efac = 1,cex=1.2,rows=-0.5,digits=round_decimal(),col='firebrick2',border='firebrick2')
                      }) }
                  }}, ignoreNULL = FALSE,ignoreInit = FALSE,priority=2)
-  
-  # # update selected tab after recalculating
-  # observeEvent(input$enter,{
-  #   updateNavbarPage(getDefaultReactiveDomain(),"navbar",selected="Age vs. Allele")
-  # })
-  
   
 }
 shinyApp(ui = ui, server = server)
