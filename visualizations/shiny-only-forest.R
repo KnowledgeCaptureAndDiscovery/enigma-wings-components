@@ -23,15 +23,11 @@ size_min_value = 0.5
 size_ratio_value = 0.5
 
 var1 = 'EFFECT'
-# var2 = gsub("\\(E\\)","", gsub(" ", "", args[2])); # variable to test for association'
-# var2 = 'HasNumberOfFemaleSex'
-# print(paste0("commands are: ", args[1],args[2], args[3]))
-# print(paste0("input value2 is: ", args[2]))
-# print(paste0("var2 value is: ",var2))
-var2_read = read.delim('input_var.txt', header=FALSE, col.names='input_var')
-var2 = as.character(var2_read$input_var)
-var2 = gsub("\\(E\\)","", gsub(" ", "",var2))
-print(paste0("the var2 value using new method is: ",var2))
+#var2 = 'MEAN_AGE'     ### added by shruti for local machine
+ var2_read = read.delim('input_var.txt', header=FALSE, col.names='input_var')    ### commented by shruti for local machine
+ var2 = as.character(var2_read$input_var)                                        ### commented by shruti for local machine
+ var2 = gsub("\\(E\\)","", gsub(" ", "",var2))                                   ### commented by shruti for local machine
+ print(paste0("the var2 value using new method is: ",var2))                      ### commented by shruti for local machine
 
 #####DATA CLEANING##########
 # define functions
@@ -93,7 +89,8 @@ digits = function(regression_object){
 
 #####READ DATA AND DATA CLEANING########
 #Data cleaning
-data = FileReadFunc("data.csv") ####################???????? working???????????????
+ data = FileReadFunc("data.csv") ####################???????? working???????????????
+#data  =FileReadFunc("/Users/shruti_wbp/Desktop/shiny_wings/may_4_2022/Precentral_rs1080066_ABCD_0315_0.xlsx")         ### added by shruti for local machine
 #data = read.csv(args[1])
 # Remove missing data in Effect and Age
 data = RemoveMissingFunc(data, c(var1, var2))
@@ -214,7 +211,7 @@ ui <- fluidPage(
     # plotOutput("forestplot1", width=600, height=800)
     # outputs
     navbarPage(id="navbar",title=span("",style="font-weight:bold;font-size:15px"),collapsible = TRUE,fluid = TRUE,selected="Age vs. Allele",
-               tabPanel("Age vs. Allele",fluidRow(column(width=12, align='center', offset=2,plotlyOutput("scatterplot1", width = 600, height = 500))),
+               tabPanel("Age vs. Allele",fluidRow(column(width=12, align='center', offset=2, plotlyOutput("scatterplot1", width = 600, height = 500))),
                         fluidRow(column(width=12, align='left', offset=5, div(tableOutput('table1'), style='font-size:85%'),
                                         # change table style
                                         tags$head(tags$style("#table1 table{background-color:lightgrey}", media="screen",type="text/css"))))),
@@ -306,7 +303,7 @@ server = function(input, output,session) {
                                   # define legend title
                                   # labs(color="Cohort size")+
                                   # scale_color_continuous(name="Cohort size",limits=c(0,max(subset_data()$N)+500))+
-                                  
+
                                   # turn off size legend and set parameters for the color bar
                                   # guides(size="none")+
                                   # scale_size(range=c(1,4)) +
@@ -327,28 +324,6 @@ server = function(input, output,session) {
                                 tooltip="text")
                      })
                      
-                     # output$scatterplot1 = renderPlotly({
-                     #   plot(subset_data()$MEAN_AGE, 
-                     #        subset_data()$EFFECT, 
-                     #        pch=19, 
-                     #        cex=size_min_value + size_ratio_value * (subset_data()$N - min(subset_data()$N))/(max(subset_data()$N) - min(subset_data()$N)), 
-                     #        ylab="Unstandardized Effect Size", 
-                     #        xlab="Mean Age",
-                     #        cex.lab=0.8, 
-                     #        cex.main=0.8,
-                     #        las=1, 
-                     #        bty="l",
-                     #        xlim=c(min(subset_data()$MEAN_AGE),max(subset_data()$MEAN_AGE)))
-                     #   # intercept1 = paste("(",round(result$ci.lb[2],2),", ",round(result$ci.ub[2],2),")",sep=""),
-                     #   # intercept2 = paste("(",round(result$ci.lb[1],2),", ",round(result$ci.ub[1],2),")",sep=""),
-                     #   annotation = c(paste("Beta:", round(result$beta[2],2),intercept1),
-                     #                  paste("Intercept:", round(result$beta[1],2), intercept2),
-                     #                  paste("P-value:", round(result$QMp,2)),
-                     #                  paste("Number of Study:", result$k))
-                     #   legend("bottomright", annotation, bty = "n")
-                     # })
-                     
-                     
                      # output$table1 = renderTable(stats, striped=TRUE,hover=TRUE,bordered=TRUE,align='c')
                      
                      output$forestplot1 = renderPlot({
@@ -356,11 +331,11 @@ server = function(input, output,session) {
                        # ci_max = max(data$CI_UB)
                        # ci_gap = abs((abs(ci_max) - abs(ci_min))) / 2
                        x_pos = ci_min - abs(ci_min)*0.3
-                       forest(x = reg_result(), 
-                              #ilab = subset_data()[,var2],
+                       forest(x = reg_result(),
+                              # ilab = subset_data()[,var2],
                               ilab = subset_data()[[var2]],
                               ilab.xpos = x_pos, 
-                              slab=paste(subset_data()$Study), 
+                              slab=paste(subset_data()$Study),
                               cex=1, 
                               addfit=FALSE, 
                               header=TRUE,
@@ -376,8 +351,9 @@ server = function(input, output,session) {
                        print(length(x$pred))
                        print(length(x$se))
                        par(col='firebrick2',col.lab='black')
-                       addpoly(x$pred, sei=x$se, mlab="Discovery", efac = 1,cex=1.2,rows=-0.5,digits=round_decimal(),col='firebrick2',border='firebrick2')
-                       # addpoly(x$pred, sei=x$se, mlab=c("Discovery"), rows=-0.5,  efac = 1, cex=1.2, digits=round_decimal(),col='firebrick2',border='firebrick2')
+                       # addpoly(x$pred, sei=x$se, mlab="Discovery", efac = 1,cex=1.2,rows=-0.5,digits=round_decimal(),col='firebrick2',border='firebrick2') #for 62, 50 and 40 cohorts
+                       # addpoly(x$pred, sei=x$se, mlab="Discovery", rows=0.1,  efac = 1, cex=1.2, digits=round_decimal(),col='firebrick2',border='firebrick2') #for 30, 20 cohorts
+                       addpoly(x$pred, sei=x$se, mlab="Discovery", rows=0.5,  efac = 1, cex=1.2, digits=round_decimal(),col='firebrick2',border='firebrick2') #for 10, 5 cohorts
                      }) }
                  }}, ignoreNULL = FALSE,ignoreInit = FALSE,priority=2)
   
@@ -389,8 +365,3 @@ server = function(input, output,session) {
   
 }
 shinyApp(ui = ui, server = server)
-
-
-
-
-
