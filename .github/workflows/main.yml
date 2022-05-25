@@ -39,10 +39,10 @@ jobs:
           docker build -t shiny-extras .
 
       # Runs all tests
-      - name: Running meta-analysis test
-        run: |
-          cd ./test/meta-analysis/
-          bash run.sh
+      #- name: Running meta-analysis test
+      #  run: |
+      #    cd ./test/meta-analysis/
+      #    bash run.sh
       
       - name: Running meta-regression mean age test
         run: |
