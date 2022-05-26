@@ -86,8 +86,8 @@ digits = function(regression_object){
 
 #####READ DATA AND DATA CLEANING########
 #Data cleaning
-# data = FileReadFunc("data.csv") ####################???????? working???????????????
-data  =FileReadFunc("/Users/shruti_wbp/Desktop/shiny_wings/may_25_2022/Precentral_rs1080066_ABCD_0315.xlsx")         ### added by shruti for local machine
+data = FileReadFunc("data.csv") ####################???????? working???????????????
+# data  =FileReadFunc("/Users/shruti_wbp/Desktop/shiny_wings/may_25_2022/Precentral_rs1080066_ABCD_0315.xlsx")         ### added by shruti for local machine
 
 # Remove missing data in Effect and Age
 data = RemoveMissingFunc(data, c(var1, var2))
