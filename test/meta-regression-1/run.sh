@@ -36,7 +36,7 @@ demographic_annot='Age'
 
 
 #Running the container. Coping tmp to appname and publishing everithing on $TEMP
-docker run -v $TEMP:$APPNAME --rm shiny-extras /bin/sh -c "cd $APPNAME; R --no-save --slave --args ${effect} ${demographic} ${NonEuro} ${cohort_size} ${cols} ${sample_size} ${CI_LBB} ${CI_UBB} ${Area} ${Trait} ${SNP} ${min_val} ${max_val} ${demographic_annot} < run.R"   
+docker run -v $TEMP:$APPNAME --rm shiny-extras /bin/sh -c "cd $APPNAME; R --no-save --slave --args ${effect} ${demographic} ${NonEuro} ${cohort_size} ${cols} ${sample_size} ${CI_LBB} ${CI_UBB} ${Area} ${Trait} ${SNP} ${min_val} ${max_val} ${demographic_annot} < publish.R"   
 
 
 #Running the container. Coping tmp to appname and publishing everithing on $TEMP
