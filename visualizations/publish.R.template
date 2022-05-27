@@ -19,7 +19,8 @@ demographic_annot=cmdargs[14];
 
 
 save.image("data.RData")
-rsconnect::setAccountInfo(name='hvarg', token='${SHINY_TOKEN}', secret='${SHINY_SECRET}')
+rsconnect::setAccountInfo(name='bagari',token='11E2F5102E117E56080B9B76E526DCFF',secret='l2jkO5LHgn2MAaOd5CSaZkpoMYH0sDTfBx0GrUxQ')
 rsconnect::deployApp(appFiles=c('app.R', 'data.csv', 'data.RData')) 
 
+#rsconnect::setAccountInfo(name='hvarg', token='${SHINY_TOKEN}', secret='${SHINY_SECRET}')
 # rsconnect::deployApp()
