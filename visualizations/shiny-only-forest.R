@@ -22,9 +22,11 @@ print(CI_LBB)
 print(CI_UBB)
 print(Area)
 print(Trait)
+print(snp)
 print(min_val)
 print(max_val)
 print(demographic_annot)
+
 ############################# DEFINE HARD CODED PARAMETERS, change these to variables ###############################
 pred_length = 100
 cex_lab_value = 0.8 # magnification of x and y labels relative to cex
