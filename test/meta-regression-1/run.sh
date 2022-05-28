@@ -5,8 +5,7 @@ TEMP=$(mktemp -d)
 # Copy scripts to temp directory
 cp ../../visualizations/shiny-only-forest.R $TEMP/app.R
 cp ../../visualizations/publish.R $TEMP/publish.R
-# cp ../data/mergedFile-2 $TEMP/data.csv
-cp ../data/data.csv $TEMP/data.csv
+cp ../data/mergedFile-2 $TEMP/data.csv
 cp input_var.txt $TEMP/input_var.txt
 
 # Name of the application to be published. Must start with /
@@ -21,7 +20,7 @@ APPNAME="/forestplot_$(date +%s)"
 
 
 effect='EFFECT'
-demographic='MEAN_AGE'
+demographic='HasAgeMean'
 NonEuro=(GOBS,IMH,UNICAMP,Meth-CT,MIRECC,Meth-CT,MIRECC,UKBB_NonEuropean,OSAKA,PING_NonEuropean,UKBB)
 cohort_size='N'
 sample_size='SAMPLE_SIZE'
