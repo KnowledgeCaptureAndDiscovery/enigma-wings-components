@@ -12,6 +12,9 @@ library(dplyr)
 
 load("data.RData")
 
+print(Trait)
+print(demographic_annot)
+
 ######### DEFINE HARD CODED PARAMETERS, change these to variables #####################
 pred_length = 100
 cex_lab_value = 0.8 # magnification of x and y labels relative to cex
