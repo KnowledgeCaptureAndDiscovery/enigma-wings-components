@@ -17,8 +17,6 @@ APPNAME="/forestplot_$(date +%s)"
 #docker build -t shiny-extras $BASEDIR
 #Should be commented after creating the shiny-extras image.
 
-
-
 effect='EFFECT'
 demographic='HasAgeMean'
 NonEuro=(GOBS,IMH,UNICAMP,Meth-CT,MIRECC,Meth-CT,MIRECC,UKBB_NonEuropean,OSAKA,PING_NonEuropean,UKBB)
@@ -37,10 +35,6 @@ demographic_annot='Age'
 
 #Running the container. Coping tmp to appname and publishing everithing on $TEMP
 docker run -v $TEMP:$APPNAME --rm shiny-extras /bin/sh -c "cd $APPNAME; R < publish.R --no-save --slave --args ${effect} ${demographic} ${NonEuro} ${cohort_size} ${cols} ${sample_size} ${CI_LBB} ${CI_UBB} ${Area} ${Trait} ${SNP} ${min_val} ${max_val} ${demographic_annot} > publish.log"   
-
-
-#Running the container. Coping tmp to appname and publishing everithing on $TEMP
-# docker run -v $TEMP:$APPNAME --rm shiny-extras /bin/sh -c "cd $APPNAME; Rscript publish.R > publish.log"
 
 #creating shiny config
 echo "{\"url\": \"$(tail -1 $TEMP/publish.log | sed 's/^.* //g')\"}" > shinyViz.txt
