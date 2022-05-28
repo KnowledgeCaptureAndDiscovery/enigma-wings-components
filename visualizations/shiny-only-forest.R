@@ -12,19 +12,14 @@ library(dplyr)
 
 load("data.RData")
 
-############################# DEFINE HARD CODED PARAMETERS, change these to variables ###############################
+######### DEFINE HARD CODED PARAMETERS, change these to variables #####################
 pred_length = 100
 cex_lab_value = 0.8 # magnification of x and y labels relative to cex
 cex_main_value = 0.8 # magnification of titles relative to cex
 las_value = 1
 pch_value = 19
 size_min_value = 0.5
-size_ratio_value = 0.5
-
-# var2_read = read.delim('input_var.txt', header=FALSE, col.names='input_var')    
-# var2 = as.character(var2_read$input_var)                                        
-# var2 = gsub("\\(E\\)","", gsub(" ", "",var2))                                  
-# print(paste0("the var2 value using new method is: ",var2))                      
+size_ratio_value = 0.5                     
 ########################################################################################
 
 #####DATA CLEANING##########
