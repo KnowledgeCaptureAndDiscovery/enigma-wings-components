@@ -2,8 +2,9 @@ library(rsconnect)
 
 
 cmdargs = commandArgs(trailingOnly=T)
-var1 = cmdargs[1];     						   
-var2 = cmdargs[2];     						          
+
+effect = cmdargs[1];     						   
+demographic = cmdargs[2];     						          
 NonEuro = unlist(strsplit(cmdargs[3], ","));    
 cohort_size = cmdargs[4];                      
 cols = unlist(strsplit(cmdargs[5], ","));       
