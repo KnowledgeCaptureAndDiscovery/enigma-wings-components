@@ -85,26 +85,6 @@ data[cohort_size] = data[sample_size]
 data$SE =(data[[CI_UBB]] - data[[CI_LBB]])/(2*1.96)
 data$Z = data[effect]/data$SE
 
-
-#Function to generate full annotation
-annotation_function = function(area_string, trait_string){
-  if(area_string=="TotalSA"){     
-    area="Total Surface Area"     
-  }else{
-    area=area_string
-  }
-  if(trait_string=="SA"){         
-    trait="Surface Area"          
-  }else{
-    trait=trait_string
-  }
-  return(list(area,trait))
-}
-
-area=annotation_function(Area, Trait)[1]
-trait=annotation_function(Area, Trait)[2]
-
-
 #######UI########
 ui <- fluidPage(
   
@@ -132,11 +112,11 @@ ui <- fluidPage(
     tags$p(
       tags$div("The results are for: ", style="font-weight:bold;color:LightSlateGray;font-size:120%"),
       tags$span("Area: ", style="font-weight:bold;color:LightSlateGray", class="annotation"),
-      tags$span(area, style="color:DarkMagenta"),
+      tags$span(Area, style="color:DarkMagenta"),
       tags$span(HTML('&nbsp;'),HTML('&nbsp;'),HTML('&nbsp;'),"SNP: ", style="font-weight:bold;color:LightSlateGray", class="annotation"),
       tags$span(snp, style="color:DarkMagenta"),
       tags$span(HTML('&nbsp;'),HTML('&nbsp;'),HTML('&nbsp;'),"Trait: ", style="font-weight:bold;color:LightSlateGray", class="annotation"),
-      tags$span(trait, style="color:DarkMagenta")
+      tags$span(Trait, style="color:DarkMagenta")
     ),
     
     #Outputs panel
