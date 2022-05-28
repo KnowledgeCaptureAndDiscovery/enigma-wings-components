@@ -12,11 +12,11 @@ sample_size = cmdargs[6];
 CI_LBB = cmdargs[7];                           
 CI_UBB = cmdargs[8];                           
 Area = cmdargs[9];                                 
-Trait = cmdargs[10];                           
+Trait = gsub(","," ",cmdargs[10]);                           
 snp = cmdargs[11]; 							   
 min_val=as.numeric(cmdargs[12]);						    
 max_val=as.numeric(cmdargs[13]);						   
-demographic_annot=cmdargs[14];
+demographic_annot=gsub(","," ",cmdargs[14]);
 
 
 save.image("data.RData")
