@@ -17,19 +17,6 @@ min_val=cmdargs[12];
 max_val=cmdargs[13];						   
 demographic_annot=cmdargs[14];
 
-print(var1)
-print(var2)
-print(NonEuro)
-print(cohort_size)
-print(cols)
-print(sample_size)
-print(CI_LBB)
-print(CI_UBB)
-print(Area)
-print(Trait)
-print(min_val)
-print(max_val)
-print(demographic_annot)
 
 save.image("data.RData")
 rsconnect::setAccountInfo(name='bagari',token='11E2F5102E117E56080B9B76E526DCFF',secret='l2jkO5LHgn2MAaOd5CSaZkpoMYH0sDTfBx0GrUxQ')
