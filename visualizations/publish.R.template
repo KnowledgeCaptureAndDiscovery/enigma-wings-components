@@ -13,8 +13,8 @@ CI_UBB = cmdargs[8];
 Area = cmdargs[9];                                 
 Trait = cmdargs[10];                           
 snp = cmdargs[11]; 							   
-min_val=cmdargs[12];						    
-max_val=cmdargs[13];						   
+min_val=as.numeric(cmdargs[12]);						    
+max_val=as.numeric(cmdargs[13]);						   
 demographic_annot=cmdargs[14];
 
 
