@@ -4,9 +4,9 @@ library(rsconnect)
 cmdargs = commandArgs(trailingOnly=T)
 var1 = cmdargs[1];     						   
 var2 = cmdargs[2];     						          
-NonEuro = unlist(strsplit(cmdargs[3], ","))    
+NonEuro = unlist(strsplit(cmdargs[3], ","));    
 cohort_size = cmdargs[4];                      
-cols = unlist(strsplit(cmdargs[5], ","))       
+cols = unlist(strsplit(cmdargs[5], ","));       
 sample_size = cmdargs[6];                      
 CI_LBB = cmdargs[7];                           
 CI_UBB = cmdargs[8];                           
