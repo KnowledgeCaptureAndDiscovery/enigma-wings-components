@@ -26,11 +26,11 @@ CI_LBB='CI_LB'
 CI_UBB='CI_UB'
 cols=($effect,$sample_size,$demographic,$CI_LBB,$CI_UBB,N,TOTAL_N,PCT)
 Area='Precentral'
-Trait=('SurfaceArea')
+Trait=("Surface Area")
 SNP='rs1080066'
 min_val=0
 max_val=120
-demographic_annot=('MeanAge')
+demographic_annot=("Mean Age")
 
 
 #Running the container. Coping tmp to appname and publishing everithing on $TEMP
