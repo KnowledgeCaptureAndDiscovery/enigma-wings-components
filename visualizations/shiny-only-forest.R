@@ -65,7 +65,7 @@ digits = function(regression_object){
 data = FileReadFunc("data.csv") 
 
 #Remove missing data in Effect and Age
-data = RemoveMissingFunc(data, c(var1, var2))
+data = RemoveMissingFunc(data, c(effect, demographic))
 
 #Remove mergeD cohorts based on column N
 data = FilterMergFunc(data, cohort_size) 
@@ -74,7 +74,7 @@ data = FilterMergFunc(data, cohort_size)
 data = RemoveNonEuroFunc(data) 
 
 # Manually add Age when NA
-data[is.na(data[var2]),var2] = 30
+data[is.na(data[demographic]),demographic] = 30
 
 #Convert data types for certain columns
 data[cols]=lapply(data[cols],as.character)
@@ -83,7 +83,7 @@ data[cols]=lapply(data[cols],as.numeric)
 #Extract features to run meta regression
 data[cohort_size] = data[sample_size]
 data$SE =(data[[CI_UBB]] - data[[CI_LBB]])/(2*1.96)
-data$Z = data[var1]/data$SE
+data$Z = data[effect]/data$SE
 
 
 #Function to generate full annotation
@@ -182,7 +182,7 @@ ui <- fluidPage(
 server = function(input, output,session) {
   #Define res function and error control
   res=function(x){
-    tryCatch(rma.uni(yi=x[[var1]], sei=x$SE, mods=x[,var2],verbose=TRUE,method="FE",control=list(stepadj=0.4, maxiter=1000), digits = 5),
+    tryCatch(rma.uni(yi=x[[effect]], sei=x$SE, mods=x[,demographic],verbose=TRUE,method="FE",control=list(stepadj=0.4, maxiter=1000), digits = 5),
              warning=function(w){showModal(modalDialog(
                title="Warning", HTML("Warning:<br>Regression failed<br>Model failed to converge, please select more studies."),easyClose = FALSE, footer = modalButton('OK')))
                return(NULL)},
@@ -211,7 +211,7 @@ server = function(input, output,session) {
                  }  
                  #Generate outputs  
                  else{
-                   subset_data=eventReactive(input$enter_button,{subset(data, data[[var2]] >=input$min & data[[var2]]<=input$max)},ignoreNULL = FALSE,ignoreInit = FALSE)
+                   subset_data=eventReactive(input$enter_button,{subset(data, data[[demographic]] >=input$min & data[[demographic]]<=input$max)},ignoreNULL = FALSE,ignoreInit = FALSE)
                    reg_result = reactive( {res(subset_data())})
                    if(is.null(reg_result())==TRUE){
                      output$scatterplot1=renderPlotly({})
@@ -220,9 +220,9 @@ server = function(input, output,session) {
                      pval = reactive({reg_result()$pval})
                      beta = reactive({reg_result()$beta})
                      #Convert the result to dataframe
-                     result = reactive({preds = predict(reg_result(), newmods=seq(min(subset_data()[[var2]]),max(subset_data()[[var2]]),length=pred_length))
+                     result = reactive({preds = predict(reg_result(), newmods=seq(min(subset_data()[[demographic]]),max(subset_data()[[demographic]]),length=pred_length))
                      result_df = as.data.frame(preds)
-                     result_df[var2] = seq(min(subset_data()[[var2]]),max(subset_data()[[var2]]),length=pred_length)
+                     result_df[demographic] = seq(min(subset_data()[[demographic]]),max(subset_data()[[demographic]]),length=pred_length)
                      return(result_df)})
                      #Size of dots
                      size = reactive({size_min_value + size_ratio_value * (subset_data()[[cohort_size]] - min(subset_data()[[cohort_size]]))/(max(subset_data()[[cohort_size]]) - min(subset_data()[[cohort_size]]))})
@@ -242,13 +242,13 @@ server = function(input, output,session) {
                      
                      #Generate meta regression scatter plot
                      output$scatterplot1 = renderPlotly({
-                       ggplotly(ggplot(subset_data(), aes(x=subset_data()[[var2]], y=subset_data()[[var1]])) +
-                                  geom_point(aes(size=size(),text=paste0('Study: ',Study,'\n', paste(demographic_annot, ':', sep=' '),subset_data()[[var2]],'\n','Effect size: ',format(subset_data()[[var1]],scientific=FALSE),'\n','Cohort size: ', N))) +
+                       ggplotly(ggplot(subset_data(), aes(x=subset_data()[[demographic]], y=subset_data()[[effect]])) +
+                                  geom_point(aes(size=size(),text=paste0('Study: ',Study,'\n', paste(demographic_annot, ':', sep=' '),subset_data()[[demographic]],'\n','Effect size: ',format(subset_data()[[effect]],scientific=FALSE),'\n','Cohort size: ', N))) +
                                   xlab(demographic_annot) +    
                                   ylab('Unstandardized Effect Size')+
-                                  geom_line(data=result(), aes(x=result()[[var2]], y=pred)) +
-                                  geom_line(data=result(), aes(x=result()[[var2]], y=ci.lb), linetype="dashed") +
-                                  geom_line(data=result(), aes(x=result()[[var2]], y=ci.ub), linetype="dashed") +
+                                  geom_line(data=result(), aes(x=result()[[demographic]], y=pred)) +
+                                  geom_line(data=result(), aes(x=result()[[demographic]], y=ci.lb), linetype="dashed") +
+                                  geom_line(data=result(), aes(x=result()[[demographic]], y=ci.ub), linetype="dashed") +
                                   theme_classic() +
                                   theme(plot.margin=unit(c(0.5,0.5,0.5,0.5),'cm'),
                                         axis.title.x = element_text(face='bold',size=14),
@@ -261,7 +261,7 @@ server = function(input, output,session) {
                        ci_min = min(subset_data()[[CI_LBB]])
                        x_pos = ci_min - abs(ci_min)*0.3
                        forest(x = reg_result(),
-                              ilab = subset_data()[[var2]],
+                              ilab = subset_data()[[demographic]],
                               ilab.xpos = x_pos, 
                               slab=paste(subset_data()$Study),     
                               cex=1, 
@@ -273,7 +273,7 @@ server = function(input, output,session) {
                        y_pos = length(subset_data()$Study) + 2     
                        par(col='black',cex=1,font=2)
                        text(x_pos, y_pos, demographic_annot) 
-                       x = predict(reg_result(),newmods = mean(subset_data()[[var2]]))
+                       x = predict(reg_result(),newmods = mean(subset_data()[[demographic]]))
                        print(length(x$pred))
                        print(length(x$se))
                        par(col='firebrick2',col.lab='black')
