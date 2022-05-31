@@ -30,7 +30,7 @@ Area='Precentral'
 Trait=(Surface,Area)
 SNP='rs1080066'
 min_val=0
-max_val=120
+max_val=1
 demographic_annot=(Female,Percentage)
 
 #Running the container. Coping tmp to appname and publishing everithing on $TEMP
