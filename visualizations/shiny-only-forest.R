@@ -148,8 +148,7 @@ ui <- fluidPage(
                                         # change table style
                                         tags$head(tags$style("#table1 table{background-color:lightgrey}", media="screen",type="text/css"))))),
                tabPanel("Forest Plot",fluidRow(column(width=12, align='center', offset=2, plotOutput("forestplot1", width = 600, height = 800)))),
-               tags$style(type="text/css",
-                          HTML(".navbar {background-color:Linen;font-size:15px;},
+               tags$style(HTML(".navbar {background-color:Linen;font-size:15px;},
                                 .navbar-default .navbar-nav>li:hover{background-color:BlanchedAlmond;font-weight:bold;} ,
                                 .navbar-default .navbar-nav>.active>a{font-weight:bold;}, 
                                 .navbar-brand{display:none}"))
