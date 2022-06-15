@@ -235,15 +235,15 @@ server = function(input, output,session) {
                                         plot.title = element_text(face='bold',size=14,hjust=0.5, vjust=0.5)),
                                 tooltip="text")
                      })
-                     
-                     output$forestplot1 = renderPlot({
+                  
+                    output$forestplot1 = renderPlot({
                        ci_min = min(subset_data()[[CI_LBB]])
                        x_pos = ci_min - abs(ci_min)*0.3
                        forest(x = reg_result(),
                               ilab = subset_data()[[demographic]],
                               ilab.xpos = x_pos, 
                               slab=paste(subset_data()$Study),     
-                              # cex=1, 
+                              cex=1, 
                               addfit=FALSE, 
                               header=TRUE,
                               digits=round_decimal(),
@@ -256,32 +256,8 @@ server = function(input, output,session) {
                        print(length(x$pred))
                        print(length(x$se))
                        par(col='firebrick2',col.lab='black')
-                       addpoly(x$pred, sei=x$se, mlab="Discovery", efac = 1,rows=-0.5,digits=round_decimal(),col='firebrick2',border='firebrick2')
-                     }) 
-
-                    # output$forestplot1 = renderPlot({
-                    #    ci_min = min(subset_data()[[CI_LBB]])
-                    #    x_pos = ci_min - abs(ci_min)*0.3
-                    #    forest(x = reg_result(),
-                    #           ilab = subset_data()[[demographic]],
-                    #           ilab.xpos = x_pos, 
-                    #           slab=paste(subset_data()$Study),     
-                    #           cex=1, 
-                    #           addfit=FALSE, 
-                    #           header=TRUE,
-                    #           digits=round_decimal(),
-                    #           top=1,
-                    #           psize=0.6)
-                    #    y_pos = length(subset_data()$Study) + 2     
-                    #    par(col='black',cex=1,font=2)
-                    #    text(x_pos, y_pos, demographic_annot) 
-                    #    x = predict(reg_result(),newmods = mean(subset_data()[[demographic]]))
-                    #    print(length(x$pred))
-                    #    print(length(x$se))
-                    #    par(col='firebrick2',col.lab='black')
-                    #    addpoly(x$pred, sei=x$se, mlab="Discovery", efac = 1,cex=1.2,rows=-0.5,digits=round_decimal(),col='firebrick2',border='firebrick2')
-                    #  })
-                   }
+                       addpoly(x$pred, sei=x$se, mlab="Discovery", efac = 1,cex=1.2,rows=-0.5,digits=round_decimal(),col='firebrick2',border='firebrick2')
+                     })}
                  }}, ignoreNULL = FALSE,ignoreInit = FALSE,priority=2)
   
 }
