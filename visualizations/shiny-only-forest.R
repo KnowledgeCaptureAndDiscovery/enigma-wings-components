@@ -280,7 +280,8 @@ server = function(input, output,session) {
                     #    print(length(x$se))
                     #    par(col='firebrick2',col.lab='black')
                     #    addpoly(x$pred, sei=x$se, mlab="Discovery", efac = 1,cex=1.2,rows=-0.5,digits=round_decimal(),col='firebrick2',border='firebrick2')
-                    #  })}
+                    #  })
+                   }
                  }}, ignoreNULL = FALSE,ignoreInit = FALSE,priority=2)
   
 }
