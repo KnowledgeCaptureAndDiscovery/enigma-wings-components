@@ -174,7 +174,7 @@ server = function(input, output,session) {
   observeEvent(input$enter_button, 
                { 
                  #Reset selected tab after recalculation 
-                 # updateNavbarPage(getDefaultReactiveDomain(),"navbar",selected=paste(demographic_annot,"vs. Allele" sep=" "))
+                 updateNavbarPage(getDefaultReactiveDomain(),"navbar",selected=paste(demographic_annot,"vs. Allele" sep=" "))
                  
                  # Evaluate input values 
                  if(between(input$min,min_val,max_val)==FALSE|between(input$max,min_val,max_val)==FALSE){
