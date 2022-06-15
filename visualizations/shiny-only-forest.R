@@ -142,17 +142,17 @@ ui <- fluidPage(
                      tags$div("Loading...",id="loadmessage")),
     
     #Outputs  
-    navbarPage(id="navbar",title=span("",style="font-weight:bold;font-size:15px"),collapsible = TRUE,fluid = TRUE,
+    navbarPage(id="navbar",title=NULL,
                tabPanel(paste(demographic_annot,"vs. Allele", sep=" "),fluidRow(column(width=12, align='center', offset=2, plotlyOutput("scatterplot1", width = 600, height = 500))),
                         fluidRow(column(width=12, align='left', offset=5, div(tableOutput('table1'), style='font-size:85%'),
-                                        # change table style
                                         tags$head(tags$style("#table1 table{background-color:lightgrey}", media="screen",type="text/css"))))),
-               tabPanel("Forest Plot",fluidRow(column(width=12, align='center', offset=2, plotOutput("forestplot1", width = 600, height = 800)))),
+
+               tabPanel("Forest Plot",fluidRow(column(width=12, align='center', offset=2, plotOutput("forestplot1", width = 600, height = 800))),
                tags$style(type="text/css",
-                 HTML(".navbar {background-color:Linen;font-size:15px;},
-                       .navbar-default .navbar-nav>li:hover{background-color:BlanchedAlmond;font-weight:bold;} ,
-                       .navbar-default .navbar-nav>.active>a{font-weight:bold;}, 
-                       .navbar-brand{display:none}"))
+                HTML(".navbar {background-color:Linen;font-size:15px;},
+                      .navbar-default .navbar-nav>li:hover{background-color:BlanchedAlmond;font-weight:bold;},
+                      .navbar-default .navbar-nav>.active>a{font-weight:bold;}, 
+                      .navbar-brand{display:none}")))
     )
   )
 )              
