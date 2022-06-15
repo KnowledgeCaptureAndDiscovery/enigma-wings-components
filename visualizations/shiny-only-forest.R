@@ -149,11 +149,10 @@ ui <- fluidPage(
                                         tags$head(tags$style("#table1 table{background-color:lightgrey}", media="screen",type="text/css"))))),
                tabPanel("Forest Plot",fluidRow(column(width=12, align='center', offset=2, plotOutput("forestplot1", width = 600, height = 800)))),
                tags$style(type="text/css",
-                          HTML('.navbar {background-color:Linen;font-size:15px;}',
-                               '.navbar-default .navbar-nav>li:hover{background-color:BlanchedAlmond;font-weight:bold;}',
-                               '.navbar-default .navbar-nav>.active>a{font-weight:bold;}',
-                               '.navbar-brand{display:none}'
-                          ))
+                          HTML(".navbar {background-color:Linen;font-size:15px;}
+                                .navbar-default .navbar-nav>li:hover{background-color:BlanchedAlmond;font-weight:bold;} 
+                                .navbar-default .navbar-nav>.active>a{font-weight:bold;} 
+                                .navbar-brand{display:none}"))
     )
   )
 )              
@@ -174,7 +173,7 @@ server = function(input, output,session) {
   observeEvent(input$enter_button, 
                { 
                  #Reset selected tab after recalculation 
-                 updateNavbarPage(getDefaultReactiveDomain(),"navbar",selected=paste(demographic_annot,"vs. Allele" sep=" "))
+                 #updateNavbarPage(getDefaultReactiveDomain(),"navbar",selected=paste(demographic_annot,"vs. Allele" sep=" "))
                  
                  # Evaluate input values 
                  if(between(input$min,min_val,max_val)==FALSE|between(input$max,min_val,max_val)==FALSE){
