@@ -19,7 +19,7 @@ APPNAME="/forestplot_$(date +%s)"
 
 effect='EFFECT'
 demographic='HasAgeMean'
-NonEuro=(GOBS,IMH,UNICAMP,Meth-CT,MIRECC,Meth-CT,MIRECC,UKBB_NonEuropean,OSAKA,PING_NonEuropean,UKBB)
+NonEuro=(GOBS,IMH,UNICAMP,Meth-CT,MIRECC,Meth-CT,MIRECC,UKBB_NonEuropean,OSAKA,PING_NonEuropean,UKBB,ABCD)
 cohort_size='N'
 sample_size='SAMPLE_SIZE'
 CI_LBB='CI_LB'
