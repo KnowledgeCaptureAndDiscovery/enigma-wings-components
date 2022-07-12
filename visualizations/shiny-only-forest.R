@@ -222,7 +222,7 @@ server = function(input, output,session) {
                      #Generate meta regression scatter plot
                      output$scatterplot1 = renderPlotly({
                        ggplotly(ggplot(subset_data(), aes(x=subset_data()[[demographic]], y=subset_data()[[effect]])) +
-                                  geom_point(aes(size=size(),text=paste0('Study: ',Study,'\n', paste(demographic_annot, ':', sep=' '),subset_data()[[demographic]],'\n','Effect size: ',format(subset_data()[[effect]],scientific=FALSE),'\n','Cohort size: ', N))) +
+                                  geom_point(aes(size=size(), alpha=0.2, text=paste0('Study: ',Study,'\n', paste(demographic_annot, ':', sep=' '),subset_data()[[demographic]],'\n','Effect size: ',format(subset_data()[[effect]],scientific=FALSE),'\n','Cohort size: ', N))) +
                                   xlab(demographic_annot) +    
                                   ylab('Unstandardized Effect Size')+
                                   geom_line(data=result(), aes(x=result()[[demographic]], y=pred)) +
